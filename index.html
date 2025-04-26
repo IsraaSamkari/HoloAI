@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الواقع المعماري</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #000428, #004e92);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .hero {
+      padding: 80px 20px 40px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #ccc;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #a18cd1, #fbc2eb);
+      color: #000;
+      font-size: 20px;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .upload-section {
+      margin-top: 60px;
+    }
+
+    canvas {
+      background-color: black;
+      margin-top: 20px;
+      border-radius: 20px;
+    }
+
+    input[type="file"] {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>الواقع المعماري</h1>
+    <p>تصاميم معمارية تنبض بالحياة عبر الهولوجرام</p>
+    <button class="btn" onclick="scrollToUpload()">عرض التصاميم</button>
+  </div>
+
+  <div class="upload-section" id="uploadSection">
+    <h2>مولد صور هولوجرام</h2>
+    <input type="file" id="imageUpload" accept="image/*">
+    <br>
+    <canvas id="canvas" width="800" height="800"></canvas>
+  </div>
+
+  <script>
+    function scrollToUpload() {
+      document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const upload = document.getElementById('imageUpload');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    upload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        drawHologram(img);
+      }
+      img.src = URL.createObjectURL(file);
+    });
+
+    function drawHologram(img) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = 200;
+      const h = 200;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      // Top
+      drawRotated(img, centerX, centerY - h - 10, 0);
+      // Right
+      drawRotated(img, centerX + w + 10, centerY, 90);
+      // Bottom
+      drawRotated(img, centerX, centerY + h + 10, 180);
+      // Left
+      drawRotated(img, centerX - w - 10, centerY, 270);
+    }
+
+    function drawRotated(img, x, y, angle) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle * Math.PI / 180);
+      ctx.drawImage(img, -100, -100, 200, 200); // draw centered
+      ctx.restore();
+    }
+  </script>
+
+</body>
+</html>
